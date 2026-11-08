@@ -91,6 +91,49 @@ func registerData() {
 			{Type: model.RelEncryptionKey, Field: "server_side_encryption.kms_key_arn", Targets: []string{"aws_kms_key"}},
 		},
 	})
+	register("aws_redshift_subnet_group", Adapter{
+		Family: model.FamilyDatabase, Role: model.RoleAssociation, Noun: "Redshift subnet group",
+		Identity: []string{"name", "id"},
+		Fields:   []p.Field{{Key: "name", Label: "Name"}, {Key: "description", Label: "Description", Withheld: true}},
+		Relations: []Relation{
+			{Type: model.RelSubnetMembership, Field: "subnet_ids", Targets: []string{"aws_subnet"}},
+		},
+	})
+	register("aws_redshift_cluster", Adapter{
+		Family: model.FamilyDatabase, Noun: "Redshift cluster",
+		LabelFrom: []string{"cluster_identifier"},
+		Identity:  []string{"id", "arn", "cluster_identifier"},
+		Fields: []p.Field{
+			{Key: "cluster_identifier", Label: "Identifier"},
+			{Key: "node_type", Label: "Node type"},
+			{Key: "cluster_type", Label: "Cluster type"},
+			{Key: "number_of_nodes", Label: "Nodes"},
+			{Key: "encrypted", Label: "Encrypted"},
+			{Key: "publicly_accessible", Label: "Publicly accessible"},
+			{Key: "master_username", Label: "Master username", Withheld: true},
+			{Key: "master_password", Label: "Master password", ChangeOnly: true},
+			tagsWithheld,
+		},
+		Relations: []Relation{
+			{Type: model.RelSubnetMembership, Field: "cluster_subnet_group_name", Targets: []string{"aws_redshift_subnet_group"}, Through: true},
+			{Type: model.RelSecurityGroupAttachment, Field: "vpc_security_group_ids", Targets: []string{"aws_security_group"}},
+			{Type: model.RelEncryptionKey, Field: "kms_key_id", Targets: []string{"aws_kms_key"}},
+		},
+	})
+	register("aws_ebs_volume", Adapter{
+		Family: model.FamilyStorage, Noun: "EBS volume", Placement: regional,
+		Fields: []p.Field{
+			{Key: "id", Label: "Volume ID"},
+			{Key: "availability_zone", Label: "Availability zone"},
+			{Key: "size", Label: "Size (GiB)"},
+			{Key: "type", Label: "Volume type"},
+			{Key: "encrypted", Label: "Encrypted"},
+			tagsWithheld,
+		},
+		Relations: []Relation{
+			{Type: model.RelEncryptionKey, Field: "kms_key_id", Targets: []string{"aws_kms_key"}},
+		},
+	})
 	// S3 buckets are regional services; their policies are never exported.
 	register("aws_s3_bucket", Adapter{
 		Family: model.FamilyStorage, Noun: "S3 bucket", Placement: regional,

@@ -1,0 +1,7 @@
+{
+  "version":"2", "currency":"USD", "as_of":"2026-01-01",
+  "rates":[
+    {"resource_type":"aws_ebs_volume","region":"us-east-1","selectors":{"type":"gp3"},"component":"storage_gb_month","unit":"GB-month","unit_price":"0.1"},
+    {"resource_type":"aws_sqs_queue","region":"us-east-1","selectors":{"fifo_queue":"false"},"component":"requests","unit":"request","unit_price":"0.1"}
+  ]
+}

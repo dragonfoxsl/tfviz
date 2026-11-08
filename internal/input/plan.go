@@ -41,6 +41,8 @@ type changeJSON struct {
 	AfterSensitive  any      `json:"after_sensitive"`
 	ReplacePaths    [][]any  `json:"replace_paths"`
 	Importing       any      `json:"importing"`
+	BeforeAbsent    bool     `json:"-"`
+	AfterAbsent     bool     `json:"-"`
 }
 
 func readPlan(data []byte) (*Snapshot, error) {
@@ -104,6 +106,8 @@ func planResource(rc resourceChangeJSON) Resource {
 		ReplacePaths:    flattenPaths(c.ReplacePaths),
 		HasBefore:       c.Before != nil,
 		HasAfter:        c.After != nil,
+		BeforeAbsent:    c.BeforeAbsent,
+		AfterAbsent:     c.AfterAbsent,
 	}
 	before, after := c.Before, c.After
 	if r.HasBefore {

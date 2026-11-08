@@ -12,11 +12,12 @@ import { Inspector } from "../inspector/Inspector";
 import { Header } from "./Header";
 import { Navigator } from "./Navigator";
 import { Footer } from "./Footer";
-import { ReportIndexContext } from "./reportContext";
+import { CostPeriodContext, ReportIndexContext, type CostPeriod } from "./reportContext";
 import { useReducedMotion, useThemePreference } from "./preferences";
 
 export function App({ report, explore }: { report: Report; explore?: ExploreConfig | undefined }) {
   const index = useMemo(() => indexReport(report), [report]);
+  const [period, setPeriod] = useState<CostPeriod>("monthly");
   const [view, setView] = useState<ViewMode>(report.mode === "plan" ? "changes" : "after");
   const [structure, setStructure] = useState<Structure>(report.initial_view ?? "architecture");
   const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(() => defaultCollapsed(index, report.initial_view ?? "architecture"));
@@ -65,6 +66,7 @@ export function App({ report, explore }: { report: Report; explore?: ExploreConf
 
   return (
     <ReportIndexContext.Provider value={index}>
+      <CostPeriodContext.Provider value={{ period, setPeriod }}>
       <div className={`app${reducedMotion ? " motion-reduced" : ""}`}>
         <Header
           report={report}
@@ -95,6 +97,7 @@ export function App({ report, explore }: { report: Report; explore?: ExploreConf
         <Inspector index={index} resource={selectedId ? index.resources.get(selectedId) : undefined} onSelect={selectFromList} />
         <Footer report={report} reducedMotion={reducedMotion} onReducedMotionChange={setReducedMotion} />
       </div>
+      </CostPeriodContext.Provider>
     </ReportIndexContext.Provider>
   );
 }

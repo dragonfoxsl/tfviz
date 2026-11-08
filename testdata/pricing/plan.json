@@ -1,0 +1,28 @@
+{
+  "format_version":"1.2",
+  "terraform_version":"1.16.0",
+  "complete":true,
+  "resource_changes":[
+    {
+      "address":"aws_instance.private_example",
+      "mode":"managed","type":"aws_instance","name":"private_example",
+      "provider_name":"registry.terraform.io/hashicorp/aws",
+      "change":{
+        "actions":["create","delete"],
+        "before":{"region":"us-east-1","instance_type":"t3.micro","ami":"ami-synthetic","tenancy":"default","user_data":"CANARY-DB-PASSWORD-a41c"},
+        "after":{"region":"us-west-2","instance_type":"t3.micro","ami":"ami-synthetic","tenancy":"default","user_data":"CANARY-DB-PASSWORD-a41c"}
+      }
+    },
+    {
+      "address":"aws_instance.withheld_example",
+      "mode":"managed","type":"aws_instance","name":"withheld_example",
+      "provider_name":"registry.terraform.io/hashicorp/aws",
+      "change":{
+        "actions":["update"],
+        "before":{"region":"us-east-1","instance_type":"t3.micro","ami":"CANARY-DB-PASSWORD-a41c","tenancy":"default"},
+        "after":{"region":"us-east-1","instance_type":"t3.micro","ami":"ami-synthetic","tenancy":"default"},
+        "before_sensitive":{"ami":true}
+      }
+    }
+  ]
+}

@@ -65,6 +65,15 @@ locals {
   private_subnet_ids = [aws_subnet.private["a"].id, aws_subnet.private["b"].id]
 }
 
+resource "aws_vpc_endpoint" "sqs" {
+  vpc_id              = aws_vpc.platform.id
+  service_name        = "com.amazonaws.eu-west-1.sqs"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids          = local.private_subnet_ids
+  security_group_ids  = [aws_security_group.workloads.id]
+  private_dns_enabled = false
+}
+
 resource "aws_internet_gateway" "platform" {
   vpc_id = aws_vpc.platform.id
 }

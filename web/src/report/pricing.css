@@ -1,0 +1,38 @@
+.pricing-summary {
+  max-width: 520px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
+  font-size: 12px;
+}
+
+.pricing-summary p {
+  margin: 2px 0 0;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.pricing-warning,
+.pricing-summary .pricing-warning {
+  color: var(--change-update);
+  overflow-wrap: anywhere;
+}
+
+.pricing-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 4px 0;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pricing-amounts dt {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.pricing-amounts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}

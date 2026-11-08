@@ -43,6 +43,7 @@ type Report struct {
 	Groups        []Group               `json:"groups"`
 	Warnings      []Warning             `json:"warnings"`
 	Icons         *Icons                `json:"icons,omitempty"`
+	Pricing       *Pricing              `json:"pricing,omitempty"`
 }
 
 // Icons come from an icon pack the user supplied with --icons. tfviz does not

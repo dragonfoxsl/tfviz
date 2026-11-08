@@ -92,6 +92,7 @@ export interface Report {
   groups: Group[];
   warnings: Warning[];
   icons?: Icons;
+  pricing?: Pricing;
 }
 /**
  * This interface was referenced by `Report`'s JSON-Schema
@@ -193,6 +194,7 @@ export interface Resource {
   change: Change;
   groups: ResourceGroups;
   metadata: MetadataField[];
+  cost?: CostEstimate;
 }
 /**
  * This interface was referenced by `Report`'s JSON-Schema
@@ -241,6 +243,1147 @@ export interface MetadataField {
    * Present in plan mode. unknown means the comparison could not be established.
    */
   change_status?: "unchanged" | "changed" | "added" | "removed" | "unknown";
+}
+/**
+ * This interface was referenced by `Report`'s JSON-Schema
+ * via the `definition` "CostEstimate".
+ */
+export interface CostEstimate {
+  before_monthly_cents?: number;
+  after_monthly_cents?: number;
+  delta_monthly_cents?: number;
+  before_region?: string;
+  after_region?: string;
+  reason?:
+    | "Estimate unavailable: unsupported action, resource, purchase option, or incomplete pricing evidence."
+    | "Estimate withheld because pricing evidence is sensitive."
+    | "Partial steady-state subtotal of comparable resources only; excludes unestimated resources and usage costs."
+    | "Steady-state instance-hour estimate only; storage, usage and transient replacement costs are not estimated."
+    | "Partial steady-state subtotal of comparable resources only; excludes unestimated resources and unprovided usage."
+    | "Partial steady-state estimate of supplied components only; excludes unprovided usage, other charges and transient replacement costs."
+    | "Estimate unavailable: this resource is billed only by usage and no usage was supplied.";
+  replacement_overlap?: boolean;
+  partial?: boolean;
+  usage_included?: boolean;
+  /**
+   * @maxItems 12
+   */
+  missing_usage?:
+    | []
+    | [
+        | "processed_gb"
+        | "capacity_unit_hours"
+        | "requests"
+        | "api_requests"
+        | "standard_storage_gb_month"
+        | "get_requests"
+        | "put_requests"
+        | "compute_gb_seconds"
+        | "publish_requests"
+        | "http_deliveries"
+        | "ingested_gb"
+        | "stored_gb_month"
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ]
+    | [
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        ),
+        (
+          | "processed_gb"
+          | "capacity_unit_hours"
+          | "requests"
+          | "api_requests"
+          | "standard_storage_gb_month"
+          | "get_requests"
+          | "put_requests"
+          | "compute_gb_seconds"
+          | "publish_requests"
+          | "http_deliveries"
+          | "ingested_gb"
+          | "stored_gb_month"
+        )
+      ];
 }
 /**
  * This interface was referenced by `Report`'s JSON-Schema
@@ -344,4 +1487,18 @@ export interface Icons {
   by_type: {
     [k: string]: Id;
   };
+}
+/**
+ * This interface was referenced by `Report`'s JSON-Schema
+ * via the `definition` "Pricing".
+ */
+export interface Pricing {
+  currency: string;
+  as_of: string;
+  hours_per_month: 730;
+  summary: CostEstimate;
+  usage_provided?: boolean;
+  estimated_resources: Count;
+  unestimated_resources: Count;
+  usage_omitted_resources?: Count;
 }

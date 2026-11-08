@@ -67,6 +67,34 @@ resource "aws_s3_bucket" "logs" {
   bucket = "platform-logs-fixture"
 }
 
+resource "aws_ebs_volume" "scratch" {
+  availability_zone = "eu-west-1a"
+  size              = local.proposed ? 40 : 20
+  type              = "gp3"
+  encrypted         = true
+  kms_key_id        = aws_kms_key.platform.arn
+}
+
+resource "aws_redshift_subnet_group" "warehouse" {
+  name       = "platform-warehouse"
+  subnet_ids = local.private_subnet_ids
+}
+
+resource "aws_redshift_cluster" "warehouse" {
+  cluster_identifier        = "platform-warehouse"
+  node_type                 = "ra3.xlplus"
+  cluster_type              = "multi-node"
+  number_of_nodes           = 2
+  database_name             = "platform"
+  master_username           = "warehouse_admin"
+  master_password           = var.db_password
+  cluster_subnet_group_name = aws_redshift_subnet_group.warehouse.name
+  vpc_security_group_ids    = [aws_security_group.data.id]
+  encrypted                 = true
+  kms_key_id                = aws_kms_key.platform.arn
+  skip_final_snapshot       = true
+}
+
 resource "aws_elasticache_cluster" "legacy" {
   cluster_id         = "platform-legacy"
   engine             = "memcached"

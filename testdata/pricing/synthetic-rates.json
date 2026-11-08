@@ -1,0 +1,10 @@
+{
+  "version": "1",
+  "currency": "USD",
+  "as_of": "2026-01-01",
+  "rates": [
+    {"resource_type":"aws_instance","region":"us-east-1","selectors":{"instance_type":"t3.micro","ami":"ami-synthetic","tenancy":"default"},"hourly_price":"0.0005"},
+    {"resource_type":"aws_instance","region":"us-west-2","selectors":{"instance_type":"t3.micro","ami":"ami-synthetic","tenancy":"default"},"hourly_price":"0.001"},
+    {"resource_type":"aws_db_instance","region":"us-east-1","selectors":{"instance_class":"db.t3.micro","engine":"postgres","multi_az":"true","license_model":"postgresql-license"},"hourly_price":"0.1"}
+  ]
+}

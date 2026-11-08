@@ -168,14 +168,22 @@ func (v Value) Contains(kind Kind) bool {
 // replacing every subtree marked by sensitive or unknown. When other is
 // supplied, sensitive leaves record whether raw differs from other.
 func buildValue(raw, sensitive, unknown any, other *any, otherUnknown any) Value {
-	if marked(unknown) {
-		return Value{kind: KindUnknown}
+	if marked(sensitive) || ((marked(unknown) || markerShapeMismatch(raw, sensitive) || markerShapeMismatch(raw, unknown)) && containsMark(sensitive)) {
+		comparison := ComparisonUnavailable
+		if !containsMark(unknown) && !markerShapeMismatch(raw, sensitive) {
+			comparison = compare(raw, other, otherUnknown)
+		}
+		return Value{kind: KindSensitive, comparison: comparison}
 	}
-	if marked(sensitive) {
-		return Value{kind: KindSensitive, comparison: compare(raw, other, otherUnknown)}
+	if marked(unknown) || (markerShapeMismatch(raw, unknown) && containsMark(unknown)) {
+		return Value{kind: KindUnknown}
 	}
 	switch r := raw.(type) {
 	case nil:
+		// Omitted sensitive containers still carry evidence, never payloads.
+		if containsMark(sensitive) {
+			return Value{kind: KindSensitive}
+		}
 		// A structure omitted from the value but partly marked unknown is
 		// rebuilt from its markers rather than reported as absent.
 		switch marks := unknown.(type) {
@@ -196,15 +204,31 @@ func buildValue(raw, sensitive, unknown any, other *any, otherUnknown any) Value
 	case bool:
 		return Value{kind: KindBool, boolean: r}
 	case []any:
-		items := make([]Value, len(r))
-		for i, item := range r {
-			items[i] = buildValue(item, index(sensitive, i), index(unknown, i), indexOther(other, i), index(otherUnknown, i))
+		// Producers can omit list elements that still carry sensitivity/unknown
+		// markers. Preserve that evidence rather than claiming an empty list.
+		sensitiveItems, _ := sensitive.([]any)
+		unknownItems, _ := unknown.([]any)
+		items := make([]Value, max(len(r), len(sensitiveItems), len(unknownItems)))
+		for i := range items {
+			var rawItem any
+			if i < len(r) {
+				rawItem = r[i]
+			}
+			items[i] = buildValue(rawItem, index(sensitive, i), index(unknown, i), indexOther(other, i), index(otherUnknown, i))
 		}
 		return Value{kind: KindList, items: items}
 	case map[string]any:
 		fields := make(map[string]Value, len(r))
 		for k, item := range r {
 			fields[k] = buildValue(item, field(sensitive, k), field(unknown, k), fieldOther(other, k), field(otherUnknown, k))
+		}
+		// Preserve sensitivity evidence even when a marked attribute is omitted.
+		if marks, ok := sensitive.(map[string]any); ok {
+			for k, mark := range marks {
+				if _, present := r[k]; !present && containsMark(mark) {
+					fields[k] = buildValue(nil, mark, field(unknown, k), fieldOther(other, k), field(otherUnknown, k))
+				}
+			}
 		}
 		// Producers omit unknown attributes from the value itself and list
 		// them only in the unknown markers; they must read as unknown, not absent.
@@ -233,6 +257,22 @@ func compare(raw any, other *any, otherUnknown any) Comparison {
 	return ComparisonChanged
 }
 
+// Mismatched producer marker shapes fail closed instead of losing evidence.
+func markerShapeMismatch(raw, marker any) bool {
+	if raw == nil {
+		return false // omitted values are rebuilt from their markers
+	}
+	switch marker.(type) {
+	case map[string]any:
+		_, ok := raw.(map[string]any)
+		return !ok
+	case []any:
+		_, ok := raw.([]any)
+		return !ok
+	}
+	return false
+}
+
 func marked(m any) bool {
 	b, ok := m.(bool)
 	return ok && b
@@ -259,8 +299,11 @@ func containsMark(m any) bool {
 }
 
 func index(m any, i int) any {
-	if l, ok := m.([]any); ok && i < len(l) {
-		return l[i]
+	if l, ok := m.([]any); ok {
+		if i < len(l) {
+			return l[i]
+		}
+		return nil
 	}
 	return m // a whole-list marker applies to every element
 }

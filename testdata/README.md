@@ -5,7 +5,7 @@ Everything here is synthetic. It uses the AWS documentation account `11112222333
 | Path | Contents |
 | --- | --- |
 | `stacks/aws-review/` | Terraform configuration for the review stack: VPC, subnets, routing, security groups, ALB, RDS, MSK, a Secrets Manager secret with an MSK SCRAM association, an SSM parameter and an EC2 instance. `var.phase` switches between the recorded (`prior`) and proposed (`proposed`) variants. |
-| `stacks/aws-platform/` | A second stack covering the Tier B families: EC2, ECS, EKS, Lambda, Aurora, ElastiCache, DynamoDB, S3, SQS, SNS, MSK configuration with S3 logging, standalone routes and rules, and an IAM role as the deliberately unsupported type. |
+| `stacks/aws-platform/` | A second stack covering the Tier B families: EC2, ECS, EKS, Lambda, Aurora, ElastiCache, DynamoDB, Redshift, EBS, S3, SQS, SNS, VPC endpoints, MSK configuration with S3 logging, standalone routes and rules, and an IAM role as the deliberately unsupported type. |
 | `producer/<tool>-<version>[-platform]/…` | The same outputs for each stack. |
 | `producer/<tool>-<version>/plan.json` | Real `show -json` output for the proposed change |
 | `producer/<tool>-<version>/state.json` | Real `show -json` output for the prior state |

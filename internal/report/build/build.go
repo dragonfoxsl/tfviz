@@ -9,6 +9,7 @@ import (
 
 	"github.com/danushkastanley/tfviz/internal/graph"
 	"github.com/danushkastanley/tfviz/internal/input"
+	"github.com/danushkastanley/tfviz/internal/pricing"
 	"github.com/danushkastanley/tfviz/internal/projection"
 	"github.com/danushkastanley/tfviz/internal/report/model"
 )
@@ -26,6 +27,7 @@ type Options struct {
 	// example an S3 object's last modification), when known.
 	SourceTime    *time.Time
 	SourceVersion string
+	Pricing       *pricing.Catalogue
 }
 
 // Report builds the report model. It never copies raw attribute values:
@@ -63,7 +65,11 @@ func Report(snap *input.Snapshot, opts Options) *model.Report {
 	}
 	report.Source.ObjectVersion = clip(opts.SourceVersion, 1024)
 	for _, n := range g.Nodes {
-		report.Resources = append(report.Resources, resource(n, g))
+		res := resource(n, g)
+		if g.Plan && opts.Pricing != nil {
+			res.Cost = opts.Pricing.Estimate(n.Resource)
+		}
+		report.Resources = append(report.Resources, res)
 		count(&report.Summary, n.Change.Action)
 		report.Coverage.ResourcesTotal++
 		if n.Supported {
@@ -73,6 +79,9 @@ func Report(snap *input.Snapshot, opts Options) *model.Report {
 		}
 	}
 	report.Warnings = warnings(snap, g)
+	if g.Plan && opts.Pricing != nil {
+		report.Pricing = opts.Pricing.Summarize(report.Resources)
+	}
 	// Collections are always arrays, never null, even when empty.
 	report.Relationships = nonNil(report.Relationships)
 	report.Unresolved = nonNil(report.Unresolved)

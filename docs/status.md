@@ -15,6 +15,8 @@ This page tracks progress against [the implementation plan](implementation-plan.
 
 Since M4: official AWS icons through a user-supplied pack (`--icons`, [ADR 0002](decisions/0002-user-supplied-provider-icons.md)). Relationship lines are routed around cards ([ADR 0003](decisions/0003-orthogonal-edge-routing.md)).
 
+Offline pricing: opt-in plan estimates for 16 AWS resource types from explicit local rate catalogues, with optional monthly usage ([pricing.md](pricing.md), [ADR 0004](decisions/0004-offline-pricing.md), [ADR 0005](decisions/0005-usage-aware-estimates.md)). These are partial user-rate estimates, not live AWS quotes or full bills.
+
 ## Release checklist (plan §19)
 
 | Criterion | State | Evidence |
