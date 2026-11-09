@@ -1,0 +1,7 @@
+{
+  "format_version":"1.2",
+  "resource_changes":[
+    {"address":"aws_ebs_volume.private_volume","mode":"managed","type":"aws_ebs_volume","name":"private_volume","provider_name":"registry.terraform.io/hashicorp/aws","change":{"actions":["update"],"before":{"region":"us-east-1","type":"gp3","size":10},"after":{"region":"us-east-1","type":"gp3","size":20}}},
+    {"address":"aws_sqs_queue.private_usage","mode":"managed","type":"aws_sqs_queue","name":"private_usage","provider_name":"registry.terraform.io/hashicorp/aws","change":{"actions":["update"],"before":{"region":"us-east-1","fifo_queue":false},"after":{"region":"us-east-1","fifo_queue":false}}}
+  ]
+}

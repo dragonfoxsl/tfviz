@@ -24,9 +24,42 @@
     "unresolved": { "type": "array", "items": { "$ref": "#/$defs/UnresolvedReference" } },
     "groups": { "type": "array", "items": { "$ref": "#/$defs/Group" } },
     "warnings": { "type": "array", "items": { "$ref": "#/$defs/Warning" } },
-    "icons": { "$ref": "#/$defs/Icons" }
+    "icons": { "$ref": "#/$defs/Icons" },
+    "pricing": { "$ref": "#/$defs/Pricing" }
   },
   "$defs": {
+    "Pricing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["currency", "as_of", "hours_per_month", "summary", "estimated_resources", "unestimated_resources"],
+      "properties": {
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "as_of": { "type": "string", "format": "date", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "hours_per_month": { "const": 730 },
+        "summary": { "$ref": "#/$defs/CostEstimate" },
+        "usage_provided": { "type": "boolean" },
+        "estimated_resources": { "$ref": "#/$defs/Count" },
+        "unestimated_resources": { "$ref": "#/$defs/Count" },
+        "usage_omitted_resources": { "$ref": "#/$defs/Count" }
+      }
+    },
+    "CostEstimate": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "before_monthly_cents": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "after_monthly_cents": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "delta_monthly_cents": { "type": "integer", "minimum": -9007199254740991, "maximum": 9007199254740991 },
+        "before_region": { "type": "string", "maxLength": 64, "pattern": "^[a-z]{2}(-[a-z]+)+-[0-9]+$" },
+        "after_region": { "type": "string", "maxLength": 64, "pattern": "^[a-z]{2}(-[a-z]+)+-[0-9]+$" },
+        "reason": { "enum": ["Estimate unavailable: unsupported action, resource, purchase option, or incomplete pricing evidence.", "Estimate withheld because pricing evidence is sensitive.", "Partial steady-state subtotal of comparable resources only; excludes unestimated resources and usage costs.", "Steady-state instance-hour estimate only; storage, usage and transient replacement costs are not estimated.", "Partial steady-state subtotal of comparable resources only; excludes unestimated resources and unprovided usage.", "Partial steady-state estimate of supplied components only; excludes unprovided usage, other charges and transient replacement costs.", "Estimate unavailable: this resource is billed only by usage and no usage was supplied."] },
+        "replacement_overlap": { "type": "boolean" },
+        "partial": { "type": "boolean" },
+        "usage_included": { "type": "boolean" },
+        "missing_usage": {
+          "type": "array", "uniqueItems": true, "maxItems": 12,
+          "items": { "enum": ["processed_gb", "capacity_unit_hours", "requests", "api_requests", "standard_storage_gb_month", "get_requests", "put_requests", "compute_gb_seconds", "publish_requests", "http_deliveries", "ingested_gb", "stored_gb_month"] }
+        }
+      }
+    },
     "Icons": {
       "description": "Images from an icon pack the user supplied with --icons. tfviz does not ship provider icons.",
       "type": "object",
@@ -130,7 +163,8 @@
         "support": { "description": "generic resources receive a deliberately limited card with no projected metadata.", "enum": ["supported", "generic"] },
         "change": { "$ref": "#/$defs/Change" },
         "groups": { "$ref": "#/$defs/ResourceGroups" },
-        "metadata": { "type": "array", "items": { "$ref": "#/$defs/MetadataField" } }
+        "metadata": { "type": "array", "items": { "$ref": "#/$defs/MetadataField" } },
+        "cost": { "$ref": "#/$defs/CostEstimate" }
       }
     },
     "Family": { "enum": ["network", "security", "compute", "load_balancing", "database", "streaming", "secrets", "encryption", "observability", "storage", "messaging", "configuration", "other"] },

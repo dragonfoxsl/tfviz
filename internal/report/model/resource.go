@@ -56,6 +56,7 @@ type Resource struct {
 	Change   Change          `json:"change"`
 	Groups   ResourceGroups  `json:"groups"`
 	Metadata []MetadataField `json:"metadata"`
+	Cost     *CostEstimate   `json:"cost,omitempty"`
 }
 
 // ResourceGroups is the primary placement in each view. Membership of several

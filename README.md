@@ -40,6 +40,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
 - [Installing and verifying releases](docs/install.md)
 - [Command line](docs/cli.md)
+- [Offline change cost estimates](docs/pricing.md)
 - [Using tfviz in CI](docs/ci.md)
 - [Reading state from S3](docs/s3.md)
 - [Supported resource types](docs/support.md)

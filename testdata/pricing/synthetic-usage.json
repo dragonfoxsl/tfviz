@@ -1,0 +1,1 @@
+{"version":"1","resources":{"aws_sqs_queue.private_usage":{"before":{"requests":"0"},"after":{"requests":"123.456"}}}}

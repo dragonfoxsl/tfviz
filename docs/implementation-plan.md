@@ -61,7 +61,9 @@ Deliver a polished plan-to-HTML journey before expanding resource coverage or ad
 
 ### Deferred beyond v1
 
-Live cloud inventory, cloud drift scanning, observed traffic, cost estimation, apply integration, Azure/GCP, HCP Terraform backend integration, cross-state merging, collaboration, accounts and a hosted service are later work. Broker-level or pod-level inventories require additional evidence and are not part of state-only visualisation.
+A limited opt-in offline estimate for plan changes, with optional user-supplied usage, is now approved by [ADR 0004](decisions/0004-offline-pricing.md) and [ADR 0005](decisions/0005-usage-aware-estimates.md); see [pricing.md](pricing.md). Full-bill and live-provider cost estimation remains deferred.
+
+Live cloud inventory, cloud drift scanning, observed traffic, apply integration, Azure/GCP, HCP Terraform backend integration, cross-state merging, collaboration, accounts and a hosted service are later work. Broker-level or pod-level inventories require additional evidence and are not part of state-only visualisation.
 
 SVG/PNG export is a useful next increment after the HTML experience works. Do not let image export delay the core release.
 

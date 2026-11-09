@@ -5,6 +5,7 @@ import { presentChange, type Action } from "../theme/changes";
 import type { ThemePreference } from "./preferences";
 import type { ExploreConfig } from "../report/load";
 import { RefreshControl } from "./RefreshControl";
+import { PricingSummary } from "../report/Pricing";
 
 interface Props {
   report: Report;
@@ -68,6 +69,8 @@ export function Header({ report, view, onViewChange, structure, onStructureChang
           })}
         </ul>
       )}
+
+      <PricingSummary pricing={report.pricing} />
 
       <div className="app-header__controls">
         {explore && <RefreshControl explore={explore} />}

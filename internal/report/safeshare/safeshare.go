@@ -23,7 +23,7 @@ var descriptive = map[string]bool{
 	"architectures": true, "protocol": true, "ports": true, "domain": true, "instance_tenancy": true,
 	"key_usage": true, "encryption_info.client_broker": true, "type": true, "tier": true, "availability_zone": true,
 	"ssl_policy": true, "version": true, "at_rest_encryption_enabled": true, "cpu": true, "memory": true,
-	"runtime": true,
+	"runtime": true, "encrypted": true, "cluster_type": true, "vpc_endpoint_type": true,
 }
 
 // summarised values embed several identifiers in one string; they are

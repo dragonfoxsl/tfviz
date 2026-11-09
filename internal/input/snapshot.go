@@ -65,6 +65,9 @@ type Resource struct {
 	After     Value
 	HasBefore bool
 	HasAfter  bool
+	// Explicit null sides distinguish confirmed absence from omitted data.
+	BeforeAbsent bool
+	AfterAbsent  bool
 }
 
 // NoticeCode classifies a non-fatal reading observation.

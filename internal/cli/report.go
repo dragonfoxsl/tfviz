@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/danushkastanley/tfviz/internal/input"
+	"github.com/danushkastanley/tfviz/internal/pricing"
 	"github.com/danushkastanley/tfviz/internal/report/build"
 	"github.com/danushkastanley/tfviz/internal/report/html"
 	"github.com/danushkastanley/tfviz/internal/report/model"
@@ -15,16 +16,18 @@ import (
 )
 
 type reportOptions struct {
-	input     string
-	output    string
-	title     string
-	view      string
-	force     bool
-	strict    bool
-	offline   bool
-	safeShare bool
-	icons     string
-	s3        s3Flags
+	input       string
+	output      string
+	title       string
+	view        string
+	force       bool
+	strict      bool
+	offline     bool
+	safeShare   bool
+	icons       string
+	pricingFile string
+	usageFile   string
+	s3          s3Flags
 }
 
 func parseReportFlags(kind input.SnapshotKind, args []string, env Env) (reportOptions, error) {
@@ -45,6 +48,10 @@ func parseReportFlags(kind input.SnapshotKind, args []string, env Env) (reportOp
 	fs.BoolVar(&opts.offline, "offline", false, "refuse any input that would need network access")
 	fs.BoolVar(&opts.safeShare, "safe-share", false, "replace names, IDs, ARNs, accounts, addresses and network details with stand-ins")
 	fs.StringVar(&opts.icons, "icons", "", iconsHelp)
+	if kind == input.KindPlan {
+		fs.StringVar(&opts.pricingFile, "pricing-file", "", "local offline user-rate catalogue for partial resource estimates")
+		fs.StringVar(&opts.usageFile, "usage-file", "", "optional local monthly usage JSON (requires --pricing-file)")
+	}
 	if kind == input.KindState {
 		fs.StringVar(&opts.s3.profile, "aws-profile", "", "AWS profile for s3:// inputs (uses the standard credential chain)")
 		fs.StringVar(&opts.s3.region, "aws-region", "", "region of the state bucket for s3:// inputs")
@@ -62,6 +69,8 @@ func parseReportFlags(kind input.SnapshotKind, args []string, env Env) (reportOp
 		return opts, &usageError{"invalid options"}
 	}
 	switch {
+	case opts.usageFile != "" && opts.pricingFile == "":
+		return opts, &usageError{"--usage-file requires --pricing-file"}
 	case fs.NArg() > 0:
 		return opts, &usageError{fmt.Sprintf("unexpected argument %q", clip(fs.Arg(0)))}
 	case opts.input == "":
@@ -117,6 +126,20 @@ func generate(kind input.SnapshotKind, opts reportOptions, env Env) (string, err
 // buildReport reads the input and produces the report model, applying
 // --strict and --safe-share. It is shared by report generation and explore.
 func buildReport(kind input.SnapshotKind, opts reportOptions, env Env) (*model.Report, error) {
+	var catalogue *pricing.Catalogue
+	if opts.usageFile != "" && (opts.pricingFile == "" || kind != input.KindPlan) {
+		return nil, &usageError{"--usage-file requires --pricing-file and a plan report"}
+	}
+	if opts.pricingFile != "" {
+		if kind != input.KindPlan {
+			return nil, &usageError{"--pricing-file is only supported for plan reports"}
+		}
+		var err error
+		catalogue, err = pricing.Load(opts.pricingFile)
+		if err != nil {
+			return nil, err
+		}
+	}
 	in, err := readInput(opts, env)
 	if err != nil {
 		return nil, err
@@ -126,9 +149,15 @@ func buildReport(kind input.SnapshotKind, opts reportOptions, env Env) (*model.R
 	if err != nil {
 		return nil, err
 	}
+	if opts.usageFile != "" {
+		if err := catalogue.LoadUsage(opts.usageFile, snap.Resources); err != nil {
+			return nil, err
+		}
+	}
 	report := build.Report(snap, build.Options{
 		Title: opts.title, View: model.View(opts.view), Source: in.kind, SourceTime: in.time, SourceVersion: in.version,
 		GeneratedAt: env.Now(), ToolVersion: env.Version,
+		Pricing: catalogue,
 	})
 	if opts.strict {
 		if problems := strictProblems(report); len(problems) > 0 {

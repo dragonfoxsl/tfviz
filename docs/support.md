@@ -18,6 +18,7 @@ Any other type appears with limited detail and no placement, and `--strict` trea
 | `aws_route_table_association` | Connection between resources | — |
 | `aws_subnet` | Container (subnet) | Tags |
 | `aws_vpc` | Container (vpc) | Tags |
+| `aws_vpc_endpoint` | Resource | Endpoint policy, Tags |
 
 ## Security groups
 
@@ -60,6 +61,8 @@ Any other type appears with limited detail and no placement, and `--strict` trea
 | `aws_elasticache_subnet_group` | Connection between resources | Description |
 | `aws_rds_cluster` | Resource | Master username, Master password (change only), Tags |
 | `aws_rds_cluster_instance` | Resource | Tags |
+| `aws_redshift_cluster` | Resource | Master username, Master password (change only), Tags |
+| `aws_redshift_subnet_group` | Connection between resources | Description |
 
 ## Streaming
 
@@ -81,6 +84,7 @@ Any other type appears with limited detail and no placement, and `--strict` trea
 
 | Type | Shown as | Withheld |
 | --- | --- | --- |
+| `aws_ebs_volume` | Resource | Tags |
 | `aws_s3_bucket` | Resource | Bucket policy, Tags |
 
 ## Secrets

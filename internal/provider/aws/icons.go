@@ -51,6 +51,12 @@ var iconStems = map[string][]string{
 	"aws_kms_key":                       {"Arch_AWS-Key-Management-Service"},
 	"aws_ssm_parameter":                 {"Res_AWS-Systems-Manager_Parameter-Store", "Arch_AWS-Systems-Manager"},
 	"aws_cloudwatch_log_group":          {"Res_Amazon-CloudWatch_Logs", "Arch_Amazon-CloudWatch"},
+
+	// Not yet checked against the pack; an unmatched name keeps tfviz's symbol.
+	"aws_vpc_endpoint":          {"Res_Amazon-VPC_Endpoints", "Arch_Amazon-Virtual-Private-Cloud"},
+	"aws_ebs_volume":            {"Res_Amazon-Elastic-Block-Store_Volume", "Arch_Amazon-Elastic-Block-Store"},
+	"aws_redshift_cluster":      {"Arch_Amazon-Redshift"},
+	"aws_redshift_subnet_group": {"Arch_Amazon-Redshift"},
 }
 
 // IconStems returns the AWS icon file names to look for, per resource type.

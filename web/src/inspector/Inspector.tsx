@@ -6,6 +6,7 @@ import { ChangeBadge } from "../graph/ChangeBadge";
 import { describeReplaceOrder } from "../theme/changes";
 import { MetadataTable } from "./MetadataTable";
 import { RelationshipList } from "./RelationshipList";
+import { ResourcePricing } from "../report/Pricing";
 
 interface Props {
   index: ReportIndex;
@@ -49,6 +50,8 @@ export function Inspector({ index, resource, onSelect }: Props) {
           <p className="inspector-note">This resource type is not supported yet, so tfviz shows limited detail and no placement.</p>
         )}
       </div>
+
+      <ResourcePricing resource={resource} pricing={index.report.pricing} />
 
       <section aria-labelledby="inspector-identity">
         <h3 id="inspector-identity">Identity</h3>

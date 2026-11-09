@@ -59,6 +59,22 @@ func registerNetwork() {
 			{Type: model.RelServiceReference, Field: "allocation_id", Targets: []string{"aws_eip"}},
 		},
 	})
+	register("aws_vpc_endpoint", Adapter{
+		Family: model.FamilyNetwork, Noun: "VPC endpoint", Placement: vpcScoped,
+		LabelFrom: []string{"tags.Name", "service_name"},
+		Fields: []p.Field{
+			{Key: "id", Label: "Endpoint ID"},
+			{Key: "service_name", Label: "Service"},
+			{Key: "vpc_endpoint_type", Label: "Type"},
+			{Key: "private_dns_enabled", Label: "Private DNS"},
+			{Key: "policy", Label: "Endpoint policy", Withheld: true},
+			tagsWithheld,
+		},
+		Relations: []Relation{
+			{Type: model.RelSubnetMembership, Field: "subnet_ids", Targets: []string{"aws_subnet"}},
+			{Type: model.RelSecurityGroupAttachment, Field: "security_group_ids", Targets: []string{"aws_security_group"}},
+		},
+	})
 	register("aws_route_table", Adapter{
 		Family: model.FamilyNetwork, Noun: "Route table", Placement: vpcScoped,
 		Fields: []p.Field{

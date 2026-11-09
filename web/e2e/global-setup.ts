@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { REPORTS } from "./paths";
 import { HOSTILE_TEXT, hostilePlan, largePlan } from "./syntheticPlan";
@@ -19,6 +19,15 @@ export default function globalSetup() {
   tfviz(fixturePlan, REPORTS.sample, "--title", "aws-review · proposed change");
   tfviz(fixturePlan, REPORTS.safeShare, "--safe-share", "--title", "aws-review · proposed change");
   tfviz(fixturePlan, REPORTS.icons, "--icons", placeholderIcons);
+  const pricePlan = fileURLToPath(new URL("../../testdata/pricing/plan.json", import.meta.url));
+  const rates = fileURLToPath(new URL("../../testdata/pricing/synthetic-rates.json", import.meta.url));
+  tfviz(pricePlan, REPORTS.pricing, "--pricing-file", rates, "--offline");
+  tfviz(pricePlan, REPORTS.pricingSafe, "--pricing-file", rates, "--offline", "--safe-share");
+  const partialPlan = JSON.parse(readFileSync(pricePlan, "utf8"));
+  partialPlan.resource_changes[0].change.after.instance_type = "not-in-catalogue";
+  const partialPath = `${REPORTS.dir}pricing-partial.plan.json`;
+  writeFileSync(partialPath, JSON.stringify(partialPlan));
+  tfviz(partialPath, REPORTS.pricingPartial, "--pricing-file", rates, "--offline");
   execFileSync(`${REPORTS.dir}tfviz`, ["state", "--input", fixtureState, "--output", REPORTS.state, "--force"], { cwd: repoRoot, stdio: "inherit" });
   for (const [html, doc, extra] of [
     [REPORTS.hostile, hostilePlan(), ["--title", HOSTILE_TEXT]],
