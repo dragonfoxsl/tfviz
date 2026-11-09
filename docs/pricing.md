@@ -15,6 +15,46 @@ validate rates against AWS, upload plans, or calculate your actual bill. The rat
 date is supplied by you, not a claim that a rate is current. Review the catalogue
 against your purchase terms before using an estimate for a decision.
 
+## Try it without AWS credentials
+
+From the repository root, build the CLI and render the existing synthetic fixtures.
+The build may download development dependencies; report generation is offline.
+These deliberately artificial rates are **not AWS quotes**.
+
+```bash
+make build
+demo_dir="$(mktemp -d)"
+bin/tfviz plan \
+  --input testdata/pricing/expanded-plan.json \
+  --pricing-file testdata/pricing/synthetic-rates-v2.json \
+  --usage-file testdata/pricing/synthetic-usage.json \
+  --offline --output "$demo_dir/pricing.html"
+bin/tfviz plan \
+  --input testdata/pricing/expanded-plan.json \
+  --pricing-file testdata/pricing/synthetic-rates-v2.json \
+  --offline --output "$demo_dir/no-usage.html"
+printf 'Open these files in your browser:\n%s/pricing.html\n%s/no-usage.html\n' "$demo_dir" "$demo_dir"
+```
+
+Open the printed paths directly in a browser; no server is needed. In the default
+Monthly view, `pricing.html` shows:
+
+| Resource | Before | After | Delta |
+| --- | --- | --- | --- |
+| EBS volume `private_volume` | USD 1.00 | USD 2.00 | USD +1.00 |
+| SQS queue `private_usage` | USD 0.00 | USD 12.35 | USD +12.35 |
+| Resource-cost subtotal | USD 1.00 | USD 14.35 | USD +13.35 |
+
+Select either resource to inspect its estimate. Changing **Cost period** in the
+header or inspector updates both controls; Daily and Weekly are normalized
+averages, not calendar invoices.
+
+Compare `no-usage.html`: the EBS charge remains, but SQS is **Not estimated**,
+not free. The subtotal is USD 1.00 before and USD 2.00 after, excluding that
+unestimated resource. Even with usage supplied, these are partial estimates:
+unmodeled charges, discounts and taxes remain excluded. Replace the fixtures
+with your own plan, reviewed catalogue and usage assumptions for real decisions.
+
 ## Catalogue version 2
 
 This example is **synthetic test data, not current or historical AWS pricing**:
