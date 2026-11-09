@@ -12,6 +12,7 @@ export const REPORTS = {
   state: `${dir}state.html`,
   pricing: `${dir}pricing.html`,
   pricingSafe: `${dir}pricing-safe.html`,
+  pricingPartial: `${dir}pricing-partial.html`,
 } as const;
 
 export const fileUrl = (path: string) => pathToFileURL(path).href;

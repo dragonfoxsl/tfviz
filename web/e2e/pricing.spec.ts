@@ -19,6 +19,27 @@ function expectedAmounts(cost: CostEstimate, period: "daily" | "weekly" | "month
   });
 }
 
+test("unpriced reports omit pricing controls and inspector estimates", async ({ page }) => {
+  await page.goto(fileUrl(REPORTS.sample));
+  await expect(page.locator(".react-flow__node").first()).toBeVisible();
+  await page.getByRole("button", { name: /review-events/ }).first().click();
+  await expect(page.locator(".inspector")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Estimated resource-cost subtotal" })).toHaveCount(0);
+  await expect(page.getByRole("combobox", { name: "Cost period" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Resource-cost estimate" })).toHaveCount(0);
+});
+
+test("one unavailable cost side never becomes zero or a delta", async ({ page }) => {
+  await page.goto(fileUrl(REPORTS.pricingPartial));
+  await page.getByRole("button", { name: /private_example/ }).first().click();
+  const inspector = page.locator(".inspector");
+  const amounts = inspector.locator(".pricing-amounts dd");
+  await expect(amounts).toHaveText(["USD 0.37 →", "Not estimated", "Not estimated"]);
+  await expect(inspector).toContainText("Create-first overlap: additional cost not estimated");
+  await inspector.getByRole("combobox", { name: "Cost period" }).selectOption("daily");
+  await expect(amounts).toHaveText(["USD 0.01 →", "Not estimated", "Not estimated"]);
+});
+
 for (const safe of [false, true]) {
   test(`real exporter pricing stays offline${safe ? " with safe-share" : ""}`, async ({ page }, info) => {
     const path = safe ? REPORTS.pricingSafe : REPORTS.pricing;
